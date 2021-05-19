@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Custom Toolbar Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -23,16 +23,18 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: SelectableText.rich(
-          TextSpan(text: "Hello World"),
-          selectionControls:
-              MyMaterialTextSelectionControls(handlePlayFromHere: (start, end) {
-            print(
-              "Hello World".substring(start, end),
-            );
-          }),
+    return Scaffold(
+      body: Container(
+        child: Center(
+          child: SelectableText.rich(
+            TextSpan(text: "Hello World"),
+            selectionControls:
+                CustomTextSelectionControls(customButton: (start, end) {
+              print(
+                "Hello World".substring(start, end),
+              );
+            }),
+          ),
         ),
       ),
     );

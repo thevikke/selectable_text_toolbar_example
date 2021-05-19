@@ -6,16 +6,14 @@ import 'package:flutter/widgets.dart';
 
 typedef OffsetValue = void Function(int start, int end);
 
-class MyMaterialTextSelectionControls extends MaterialTextSelectionControls {
+class CustomTextSelectionControls extends MaterialTextSelectionControls {
   // Padding between the toolbar and the anchor.
   static const double _kToolbarContentDistanceBelow = 20.0;
   static const double _kToolbarContentDistance = 8.0;
-  MyMaterialTextSelectionControls(
-      {this.handlePlayFromHere, this.handlePlaySelection});
+  CustomTextSelectionControls({this.customButton});
 
   /// Custom
-  final OffsetValue handlePlayFromHere;
-  final OffsetValue handlePlaySelection;
+  final OffsetValue customButton;
 
   /// Builder for material-style copy/paste text selection toolbar.
   @override
@@ -52,18 +50,10 @@ class MyMaterialTextSelectionControls extends MaterialTextSelectionControls {
       handleCopy: canCopy(delegate) && handleCopy != null
           ? () => handleCopy(delegate, clipboardStatus)
           : null,
-      handlePlayFromHere: () {
-        handlePlayFromHere(delegate.textEditingValue.selection.start,
-            delegate.textEditingValue.selection.end);
-        delegate.textEditingValue = delegate.textEditingValue.copyWith(
-          selection: TextSelection.collapsed(
-            offset: delegate.textEditingValue.selection.baseOffset,
-          ),
-        );
-        delegate.hideToolbar();
-      },
-      handlePlaySelection: () {
-        handlePlaySelection(delegate.textEditingValue.selection.start,
+
+      /// Custom code
+      customButton: () {
+        customButton(delegate.textEditingValue.selection.start,
             delegate.textEditingValue.selection.end);
         delegate.textEditingValue = delegate.textEditingValue.copyWith(
           selection: TextSelection.collapsed(
@@ -97,8 +87,7 @@ class MyTextSelectionToolbar extends StatefulWidget {
     this.handleSelectAll,
 
     /// Custom
-    this.handlePlayFromHere,
-    this.handlePlaySelection,
+    this.customButton,
   }) : super(key: key);
 
   final Offset anchorAbove;
@@ -110,8 +99,7 @@ class MyTextSelectionToolbar extends StatefulWidget {
   final VoidCallback handleSelectAll;
 
   /// Custom
-  final VoidCallback handlePlayFromHere;
-  final VoidCallback handlePlaySelection;
+  final VoidCallback customButton;
 
   @override
   MyTextSelectionToolbarState createState() => MyTextSelectionToolbarState();
@@ -181,12 +169,8 @@ class MyTextSelectionToolbarState extends State<MyTextSelectionToolbar> {
 
       /// Custom
       _TextSelectionToolbarItemData(
-        onPressed: widget.handlePlayFromHere,
-        label: 'Play here',
-      ),
-      _TextSelectionToolbarItemData(
-        onPressed: widget.handlePlaySelection,
-        label: 'Play selection',
+        onPressed: widget.customButton,
+        label: 'Custom button',
       ),
     ];
 
